@@ -4,10 +4,10 @@ using Moq;
 
 namespace FlashCardsAPITest;
 
-public class UnitTest1
+public class WeatherForecastTest
 {
     [Fact]
-    public void Test1()
+    public void WeatherForecastReturnsArray()
     {
         var logger = new Mock<ILogger<FlashCardsAPI.Controllers.WeatherForecastController>>();
         var sut = new FlashCardsAPI.Controllers.WeatherForecastController(logger.Object);
@@ -17,9 +17,9 @@ public class UnitTest1
         var actualFirst = actual.FirstOrDefault();
 
         Assert.True(actualFirst != null);
-        Assert.True(typeof(DateTime) == actualFirst.Date.GetType());
-        Assert.True(typeof(int) == actualFirst.TemperatureC.GetType());
-        Assert.True(typeof(int) == actualFirst.TemperatureF.GetType());
+        Assert.True(typeof(DateTime) == actualFirst?.Date.GetType());
+        Assert.True(typeof(int) == actualFirst?.TemperatureC.GetType());
+        Assert.True(typeof(int) == actualFirst?.TemperatureF.GetType());
 
         Assert.Equal(expectedType, actualType);
         Assert.True(expectedType == actualType);

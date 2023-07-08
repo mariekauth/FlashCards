@@ -90,3 +90,119 @@ Check that swagger works: https://localhost:{port}
 Check that the weather forecast works: https://localhost:{port}/WeatherForecast
 
    Documentation for [Swagger](https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio) can be found by clicking the link.
+
+---
+Short Cut
+
+Set Project Name git bash
+```
+MY_PROJECT="FlashCards"
+```
+
+Set Project Name PowerShell
+
+```
+$MY_PROJECT="FlashCards"
+```
+
+git bash OR PowerShell
+```
+git init $MY_PROJECT
+
+cd $MY_PROJECT
+
+dotnet new webapi -n "${MY_PROJECT}API" -o ./${MY_PROJECT}API -lang C# -f net6.0
+
+dotnet new xunit -n "${MY_PROJECT}APITest" -o ./${MY_PROJECT}APITest -lang C# -f net6.0
+
+dotnet dev-certs https --trust
+
+dotnet add ./${MY_PROJECT}APITest reference ./${MY_PROJECT}API/${MY_PROJECT}API.csproj
+
+dotnet add ./${MY_PROJECT}APITest package Microsoft.Extensions.Logging
+
+dotnet add ./${MY_PROJECT}APITest package moq
+
+dotnet test ./${MY_PROJECT}APITest/
+
+code .
+
+dotnet run --project ./${MY_PROJECT}API/${MY_PROJECT}API.csproj
+
+```
+
+Update Files:
+1. Display Swagger by default
+Update FlashCardsAPI/Program.cs
+```c#
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("./swagger/v1/swagger.json", "v1");
+    options.RoutePrefix = string.Empty;
+});
+```
+
+2. Have a test pass
+Update FlashCardsAPITest/UnitTest1.cs
+```c#
+    public void Test1()
+    {
+        var logger = new Mock<ILogger<FlashCardsAPI.Controllers.WeatherForecastController>>();
+        var sut = new FlashCardsAPI.Controllers.WeatherForecastController(logger.Object);
+        var expectedType = typeof(FlashCardsAPI.WeatherForecast[]);
+        var actual = sut.Get();
+        var actualType = actual.GetType();
+        var actualFirst = actual.FirstOrDefault();
+
+        Assert.True(actualFirst != null);
+        Assert.True(typeof(DateTime) == actualFirst?.Date.GetType());
+        Assert.True(typeof(int) == actualFirst?.TemperatureC.GetType());
+        Assert.True(typeof(int) == actualFirst?.TemperatureF.GetType());
+
+        Assert.Equal(expectedType, actualType);
+        Assert.True(expectedType == actualType);
+    }
+```
+
+3. Build and run test
+```
+dotnet build ./${MY_PROJECT}APITest/
+dotnet test ./${MY_PROJECT}APITest/ --collect "XPlat Code Coverage"
+```
+
+4. Set the guid, to the output from above
+```PowerShell
+$guid=""
+```
+
+```gitBash
+guid=""
+```
+
+5. Generate the html report
+```
+reportgenerator -reports:".\${MY_PROJECT}APITest\TestResults\${guid}\coverage.cobertura.xml" -targetdir:"coveragereportFlashCardsAPI" -reporttypes:Html
+```
+
+6. Open file explorer, and find the html output. Open it in a browser to view code coverage.
+
+7. Confirm that the project runs and loads the swagger page by default.
+```
+dotnet run --project ./${MY_PROJECT}API/${MY_PROJECT}API.csproj
+```
+https://localhost:{port}
+
+8. Press [CTRL][C] to stop the project from running.
+
+9. Clean Up Project
+Clean Up
+```
+cd ..
+rm ${MY_PROJECT} -r
+unset MY_PROJECT
+```
+
+*Note: If you are going to use it, instead of cleaning it up. Ensure that you add the following. 
+- .gitignore (Copied from original)
+- README.md
+- LICENSE (Choose the appropriate one for your project)

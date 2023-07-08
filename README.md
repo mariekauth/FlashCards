@@ -29,6 +29,17 @@ git clone git@github.com:mariekauth/FlashCards.git
 ```powershell
 dotnet new webapi -n "FlashCardsAPI" -o ./FlashCardsAPI -lang C# -f net6.0
 ```
+Run Project:
+```powershell
+dotnet run --project .\FlashCardsAPI\FlashCardsAPI.csproj
+```
+In the browser go the the url indicated, the port changes.
+Check that the weather forecast works: https://localhost:{port}/WeatherForecast
+
+Check that swagger works: https://localhost:{port}/swagger
+
+*Note: Currently this will fail with a 404: https://localhost:{port}
+
 5. Add xunit
 ```powershell
 dotnet new xunit -n "FlashCardsAPITest" -o ./FlashCardsAPITest -lang C# -f net6.0
@@ -59,14 +70,23 @@ reportgenerator -reports:".\FlashCardsAPITest\TestResults\5d984981-b751-4cf6-8ab
 
 ```
 8. Swagger comes preinstalled. So I just need to enable it to display by default.
-```Powershell
+```C#
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("./swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
 });
 ```
+Run Project:
+```powershell
+dotnet run --project .\FlashCardsAPI\FlashCardsAPI.csproj
+```
+Swagger should now work by default:
+
+In the browser:
+
+Check that swagger works: https://localhost:{port}
+
+Check that the weather forecast works: https://localhost:{port}/WeatherForecast
 
    Documentation for [Swagger](https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio) can be found by clicking the link.
-
-9. Configure xUnit to run unit tests, and confirm it works

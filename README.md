@@ -33,10 +33,32 @@ dotnet new webapi -n "FlashCardsAPI" -o ./FlashCardsAPI -lang C# -f net6.0
 ```powershell
 dotnet new xunit -n "FlashCardsAPITest" -o ./FlashCardsAPITest -lang C# -f net6.0
 ```
+6. Trust the dev certificate
+```
+dotnet dev-certs https --trust
+```
+7. Configure xUnit to run unit tests, and confirm it works
+```
+dotnet add .\FlashCardsAPITest reference .\FlashCardsAPI\FlashcardsAPI.csproj
 
-6. Configure xUnit to run unit tests, and confirm it works
+dotnet test .\FlashCardsAPITest\
+```
+*Note: A unit test was added for WeatherForecastController (for testing purposes). The test fails.
 
-7. Swagger comes preinstalled. So I just need to enable it to display by default.
+To fix this, we need to add a mock logger.
+```
+dotnet add .\FlashCardsAPITest package Microsoft.Extensions.Logging
+
+dotnet add .\FlashCardsAPITest package moq
+
+dotnet test .\FlashCardsAPITest\ --collect "XPlat Code Coverage"
+
+reportgenerator -reports:".\FlashCardsAPITest\TestResults\{guid}\coverage.cobertura.xml" -targetdir:"coveragereportFlashCardsAPI" -reporttypes:Html
+
+reportgenerator -reports:".\FlashCardsAPITest\TestResults\5d984981-b751-4cf6-8aba-31257c1e0e8e\coverage.cobertura.xml" -targetdir:"coveragereportFlashCardsAPI" -reporttypes:Html
+
+```
+8. Swagger comes preinstalled. So I just need to enable it to display by default.
 ```Powershell
 app.UseSwaggerUI(options =>
 {
@@ -47,4 +69,4 @@ app.UseSwaggerUI(options =>
 
    Documentation for [Swagger](https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio) can be found by clicking the link.
 
-8. Configure xUnit to run unit tests, and confirm it works
+9. Configure xUnit to run unit tests, and confirm it works

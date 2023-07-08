@@ -25,13 +25,18 @@ Setup and document from 0 to Complete
 git clone git@github.com:mariekauth/FlashCards.git
 ```
 3. Update readme and add .gitignore
-4. Add web api, and xunit
+4. Add FlashCardsAPI
 ```powershell
-dotnet new webapi -n "FlashCards" -o ./FlashCards -lang C# -f net6.0
-
-dotnet new xunit -n "FlashCardsTest" -o ./FlashCardsTest -lang C# -f net6.0
+dotnet new webapi -n "FlashCardsAPI" -o ./FlashCardsAPI -lang C# -f net6.0
 ```
-5. Swagger comes preinstalled. So I just need to enable it to display by default.
+5. Add xunit
+```powershell
+dotnet new xunit -n "FlashCardsAPITest" -o ./FlashCardsAPITest -lang C# -f net6.0
+```
+
+6. Configure xUnit to run unit tests, and confirm it works
+
+7. Swagger comes preinstalled. So I just need to enable it to display by default.
 ```Powershell
 app.UseSwaggerUI(options =>
 {
@@ -42,4 +47,4 @@ app.UseSwaggerUI(options =>
 
    Documentation for [Swagger](https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio) can be found by clicking the link.
 
-6. Configure xUnit to run unit tests, and confirm it works
+8. Configure xUnit to run unit tests, and confirm it works
